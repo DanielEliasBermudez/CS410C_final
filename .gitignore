@@ -1,5 +1,8 @@
-#Executable
+# Executable
 cg
 
-#small todo tracking file
+# small todo tracking file
 todo
+
+# .vscode stuff
+.vscode/*

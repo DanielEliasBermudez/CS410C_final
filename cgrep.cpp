@@ -26,6 +26,8 @@ int main(int argc, char **argv)
 {
     int numberOfLinesAfter;
     int numberOfLinesBefore;
+    std::string pattern;
+    std::string path;
 
     bool doneParsingOptions = false;
     int patternIndex = 1;
@@ -62,13 +64,15 @@ int main(int argc, char **argv)
 
     if ((argc - patternIndex) == 2)
     {
-        string pattern(argv[patternIndex]);
-        string path(argv[patternIndex + 1]);
+        pattern = argv[patternIndex];
+        path = argv[patternIndex + 1];
     }
     else if ((argc - patternIndex) == 1)
     {
-        string pattern(argv[patternIndex]);
-        string path(".");
+        // pattern(argv[patternIndex]);
+        // path(".");
+        pattern = argv[patternIndex];
+        path = ".";
     }
     else
     {
