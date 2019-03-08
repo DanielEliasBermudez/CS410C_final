@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include "SearchManager.h"
 using namespace std;
 
 void displayHelpMessage()
@@ -36,6 +37,7 @@ int main(int argc, char **argv)
                 if (option == "-h")
                 {
                     displayHelpMessage();
+                    return 0;
                 }
                 else
                 {
@@ -66,4 +68,6 @@ int main(int argc, char **argv)
     {
         displayHelpMessage();
     }
+    SearchManager s(pattern, path);
+    s.scan();
 }
