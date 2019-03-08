@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include "SearchManager.h"
 using namespace std;
 
 void displayHelpMessage()
@@ -12,10 +13,6 @@ void displayHelpMessage()
          << "PATH\n"
          << "\tA directory to search"
          << "Option:\n"
-         << "-A <NUM>\n"
-         << "\tshow <NUM> lines after each match\n"
-         << "-B <NUM>\n"
-         << "\tshow <NUM> lines before each match\n"
          << "-h\n"
          << "\tdisplay this help message"
          << endl;
@@ -24,8 +21,6 @@ void displayHelpMessage()
 
 int main(int argc, char **argv)
 {
-    int numberOfLinesAfter;
-    int numberOfLinesBefore;
     std::string pattern;
     std::string path;
 
@@ -39,15 +34,10 @@ int main(int argc, char **argv)
             string option(argv[i]);
             if (!strncmp(&option[0], "-", 1))
             {
-                if (option == "-A")
+                if (option == "-h")
                 {
-                    stringstream ss(argv[++i]);
-                    ss >> numberOfLinesAfter;
-                }
-                else if (option == "-B")
-                {
-                    stringstream ss(argv[++i]);
-                    ss >> numberOfLinesBefore;
+                    displayHelpMessage();
+                    return 0;
                 }
                 else
                 {
@@ -78,4 +68,6 @@ int main(int argc, char **argv)
     {
         displayHelpMessage();
     }
+    SearchManager s(pattern, path);
+    s.scan();
 }
