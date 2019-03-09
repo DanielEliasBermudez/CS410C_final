@@ -13,15 +13,14 @@ namespace fs = experimental::filesystem;
 class SearchManager
 {
   private:
-    // string _pattern;
     regex _pattern;
     string _path;
-    map<int, string> lines;
+
+    bool isExecutable(const auto &directoryEntryPermissions);
+    void scan(auto &directoryEntry);
 
   public:
     SearchManager(string &pattern, string &path);
-    void scan();
-    // void traverseHierarchy(const string& path);
-    void traverseHierarchy();
+    void traverseFilesystem();
 };
 #endif

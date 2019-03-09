@@ -69,6 +69,6 @@ int main(int argc, char **argv)
         displayHelpMessage();
     }
     SearchManager s(pattern, path);
-    s.traverseHierarchy();
+    s.traverseFilesystem();
     //s.scan();
 }
