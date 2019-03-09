@@ -5,7 +5,7 @@ SearchManager::SearchManager(string &pattern, string &path) : _pattern(pattern),
 {
 }
 
-void SearchManager::scan(auto & directoryEntry)
+void SearchManager::scan(auto &directoryEntry)
 {
 
     map<int, string> lines;
@@ -27,7 +27,8 @@ void SearchManager::scan(auto & directoryEntry)
     file.close();
 
     // Print the file name
-    if (!lines.empty()) {
+    if (!lines.empty())
+    {
         cout << directoryEntry.path() << endl;
     }
 
@@ -36,21 +37,22 @@ void SearchManager::scan(auto & directoryEntry)
         cout << i.first << ": " << i.second << endl;
     }
 
-    if (!lines.empty()) {
+    if (!lines.empty())
+    {
         cout << endl;
     }
-    
 }
 
 void SearchManager::traverseFilesystem()
 {
     cout << endl;
 
-    for (auto it = fs::recursive_directory_iterator(_path); it != fs::recursive_directory_iterator(); ++it) 
+    for (auto it = fs::recursive_directory_iterator(_path); it != fs::recursive_directory_iterator(); ++it)
     {
         //if (isExecutable(*it)) continue;
         //if (isExecutable(fs::file_status(*it).permission())) continue;
-        if (isExecutable(it->status().permissions())) continue;
+        if (isExecutable(it->status().permissions()))
+            continue;
         scan(*it);
         //cout << *it << endl;
     }
@@ -58,11 +60,11 @@ void SearchManager::traverseFilesystem()
 
 bool SearchManager::isExecutable(const auto &directoryEntryPermissions)
 {
-    if ((directoryEntryPermissions & fs::perms::owner_exec) != fs::perms::none || 
-        (directoryEntryPermissions & fs::perms::group_exec) != fs::perms::none || 
-        (directoryEntryPermissions & fs::perms::others_exec) != fs::perms::none) {
+    if ((directoryEntryPermissions & fs::perms::owner_exec) != fs::perms::none ||
+        (directoryEntryPermissions & fs::perms::group_exec) != fs::perms::none ||
+        (directoryEntryPermissions & fs::perms::others_exec) != fs::perms::none)
+    {
         return true;
     }
     return false;
-
 }
