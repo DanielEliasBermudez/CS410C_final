@@ -28,3 +28,12 @@ void SearchManager::scan()
     }
     file.close();
 }
+
+// void SearchManager::traverseHierachy(const string& path)
+void SearchManager::traverseHierarchy()
+{
+    for (auto it = fs::directory_iterator(_path); it != fs::directory_iterator(); ++it) 
+    {
+        cout << *it << endl;
+    }
+}

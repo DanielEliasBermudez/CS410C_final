@@ -5,9 +5,10 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
-#include <filesystem>
+#include <experimental/filesystem>
 
 using namespace std;
+namespace fs = experimental::filesystem;
 
 class SearchManager
 {
@@ -20,5 +21,7 @@ class SearchManager
   public:
     SearchManager(string &pattern, string &path);
     void scan();
+    // void traverseHierarchy(const string& path);
+    void traverseHierarchy();
 };
 #endif
