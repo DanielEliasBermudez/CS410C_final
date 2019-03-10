@@ -24,7 +24,7 @@ void SearchManager::scan(auto &directoryEntry)
         ++counter;
     }
     file.close();
-    
+
     string output;
     // Print the file name
     if (!lines.empty())
@@ -40,7 +40,7 @@ void SearchManager::scan(auto &directoryEntry)
         output += i.second;
         output += "\n";
     }
-    
+
     // Print a blank line between outputs
     if (!lines.empty())
     {
@@ -53,7 +53,8 @@ void SearchManager::traverseFilesystem()
 {
     cout << endl;
 
-    for (auto it = fs::recursive_directory_iterator(_path); it != fs::recursive_directory_iterator(); ++it)
+    for (auto it = fs::recursive_directory_iterator(_path);
+         it != fs::recursive_directory_iterator(); ++it)
     {
         if (isExecutable(it->status().permissions()) || isHidden(it))
         {
@@ -79,7 +80,7 @@ bool SearchManager::isExecutable(const auto &directoryEntryPermissions)
     return false;
 }
 
-bool SearchManager::isHidden(auto &directoryEntryIterator) 
+bool SearchManager::isHidden(auto &directoryEntryIterator)
 {
     // TODO figure out a way to ignore hidden directories
     /*
