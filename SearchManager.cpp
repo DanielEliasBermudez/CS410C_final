@@ -11,7 +11,6 @@ void SearchManager::scan(auto &directoryEntry)
     map<int, string> lines;
     ifstream file;
 
-    //file.open(_path);
     file.open(directoryEntry.path());
     int counter = 1;
     string line;
@@ -25,22 +24,29 @@ void SearchManager::scan(auto &directoryEntry)
         ++counter;
     }
     file.close();
-
+    
+    string output;
     // Print the file name
     if (!lines.empty())
     {
-        cout << directoryEntry.path() << endl;
+        output = directoryEntry.path();
+        output += "\n";
     }
 
     for (auto i : lines)
     {
-        cout << i.first << ": " << i.second << endl;
+        output += to_string(i.first);
+        output += ": ";
+        output += i.second;
+        output += "\n";
     }
-
+    
+    // Print a blank line between outputs
     if (!lines.empty())
     {
-        cout << endl;
+        output += "\n";
     }
+    results.push_back(output);
 }
 
 void SearchManager::traverseFilesystem()
@@ -49,12 +55,16 @@ void SearchManager::traverseFilesystem()
 
     for (auto it = fs::recursive_directory_iterator(_path); it != fs::recursive_directory_iterator(); ++it)
     {
-        //if (isExecutable(*it)) continue;
-        //if (isExecutable(fs::file_status(*it).permission())) continue;
-        if (isExecutable(it->status().permissions()))
+        if (isExecutable(it->status().permissions()) || isHidden(it))
+        {
             continue;
+        }
         scan(*it);
-        //cout << *it << endl;
+    }
+
+    for (auto i : results)
+    {
+        cout << i;
     }
 }
 
@@ -64,6 +74,29 @@ bool SearchManager::isExecutable(const auto &directoryEntryPermissions)
         (directoryEntryPermissions & fs::perms::group_exec) != fs::perms::none ||
         (directoryEntryPermissions & fs::perms::others_exec) != fs::perms::none)
     {
+        return true;
+    }
+    return false;
+}
+
+bool SearchManager::isHidden(auto &directoryEntryIterator) 
+{
+    // TODO figure out a way to ignore hidden directories
+    /*
+    // Ignore hidden directories
+    if (fs::is_directory(directoryEntryIterator->status()))
+    {
+        cout << directoryEntryIterator->path() << endl;
+        directoryEntryIterator.disable_recursion_pending();
+        cout << "disabled" << endl;
+        return true;
+    }
+    */
+
+    // Ignore hidden files
+    if (!strncmp(directoryEntryIterator->path().filename().c_str(), ".", 1))
+    {
+        //cout << directoryEntryIterator->path().filename().c_str() << endl;
         return true;
     }
     return false;

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <regex>
 #include <experimental/filesystem>
+#include <vector>
 
 using namespace std;
 namespace fs = experimental::filesystem;
@@ -15,8 +16,10 @@ class SearchManager
 private:
   regex _pattern;
   string _path;
+  vector<string> results;
 
   bool isExecutable(const auto &directoryEntryPermissions);
+  bool isHidden(auto &directoryEntryIterator);
   void scan(auto &directoryEntry);
 
 public:
