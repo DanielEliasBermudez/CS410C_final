@@ -18,7 +18,7 @@ private:
   string _path;
   vector<string> results;
 
-  bool isExecutable(const auto &directoryEntryPermissions);
+  bool isExecutableFile(const auto &directoryEntryIterator);
   bool isHidden(auto &directoryEntryIterator);
   void scan(auto &directoryEntry);
 

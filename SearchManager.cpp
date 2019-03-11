@@ -56,7 +56,7 @@ void SearchManager::traverseFilesystem()
     for (auto it = fs::recursive_directory_iterator(_path);
          it != fs::recursive_directory_iterator(); ++it)
     {
-        if (isExecutable(it->status().permissions()) || isHidden(it))
+        if (isExecutableFile(it) || isHidden(it))
         {
             continue;
         }
@@ -69,11 +69,14 @@ void SearchManager::traverseFilesystem()
     }
 }
 
-bool SearchManager::isExecutable(const auto &directoryEntryPermissions)
+bool SearchManager::isExecutableFile(const auto &directoryEntryIterator)
 {
-    if ((directoryEntryPermissions & fs::perms::owner_exec) != fs::perms::none ||
-        (directoryEntryPermissions & fs::perms::group_exec) != fs::perms::none ||
-        (directoryEntryPermissions & fs::perms::others_exec) != fs::perms::none)
+    auto perms = directoryEntryIterator->status().permissions();
+    
+    if ((fs::is_regular_file(directoryEntryIterator->status())) &&
+        ((perms & fs::perms::owner_exec) != fs::perms::none ||
+         (perms & fs::perms::group_exec) != fs::perms::none ||
+         (perms & fs::perms::others_exec) != fs::perms::none))
     {
         return true;
     }
@@ -82,22 +85,15 @@ bool SearchManager::isExecutable(const auto &directoryEntryPermissions)
 
 bool SearchManager::isHidden(auto &directoryEntryIterator)
 {
-    // TODO figure out a way to ignore hidden directories
-    /*
-    // Ignore hidden directories
-    if (fs::is_directory(directoryEntryIterator->status()))
-    {
-        cout << directoryEntryIterator->path() << endl;
-        directoryEntryIterator.disable_recursion_pending();
-        cout << "disabled" << endl;
-        return true;
-    }
-    */
 
-    // Ignore hidden files
+    // Ignore hidden files and directories
     if (!strncmp(directoryEntryIterator->path().filename().c_str(), ".", 1))
     {
-        //cout << directoryEntryIterator->path().filename().c_str() << endl;
+        // Disable recursing through a hidden directory
+        if (fs::is_directory(directoryEntryIterator->status())) 
+        {
+            directoryEntryIterator.disable_recursion_pending();
+        }
         return true;
     }
     return false;
