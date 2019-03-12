@@ -1,3 +1,14 @@
+/**
+ * Daniel Elias Bermudez
+ * CS410: Advanced Topics in C++
+ *
+ * Final Project
+ * Create a command line grep tool that uses multi threading.
+ * Cgrep.cpp parses the command line options. It builds a SearchManager object.
+ * SearchManager recursively searches the directory passed in via the arguments.
+ * Every new directory encountered in the search spawns a new SearchThread thread 
+ * object. Once all the threads return, the results are printed to the screen.
+ */
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -18,7 +29,10 @@ void displayHelpMessage()
          << endl;
     exit(0);
 }
-
+/**
+ * Parses the command line arguments and builds the SearchManager
+ * object to handle the grepping of the files.
+ */
 int main(int argc, char **argv)
 {
     std::string pattern;

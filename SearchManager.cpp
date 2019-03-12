@@ -14,6 +14,7 @@ void SearchManager::traverseFilesystem()
     SearchThread searchThread(_pattern, p, &results, &resultsMutex);
     threads.push_back(thread(searchThread));
 
+    // Recursively search the directory and spawn a thread for each new directory
     for (auto it = fs::recursive_directory_iterator(_path);
          it != fs::recursive_directory_iterator(); ++it)
     {
@@ -25,8 +26,6 @@ void SearchManager::traverseFilesystem()
         // Launch a new thread for each directory
         if (fs::is_directory(it->status()))
         {
-            //cout << it->path() << endl;
-            //cout << "time to create new thread" << endl;
             SearchThread searchThread(_pattern, it->path(), &results, &resultsMutex);
             threads.push_back(thread(searchThread));
         }
@@ -58,7 +57,6 @@ bool SearchManager::isExecutableFile(const auto &directoryEntryIterator)
 
 bool SearchManager::isHidden(auto &directoryEntryIterator)
 {
-
     // Ignore hidden files and directories
     if (!strncmp(directoryEntryIterator->path().filename().c_str(), ".", 1))
     {

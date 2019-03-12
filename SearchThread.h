@@ -1,3 +1,12 @@
+/**
+ * Daniel Elias Bermudez
+ * CS410: Advanced Topics in C++
+ *
+ * SearchThread Class.
+ * This class is a callable object that is launched as a thread from SearchManager.
+ * It searches through the directory passed in at construction. It stores
+ * the results in the results vector in SearchManager.
+ */
 #ifndef SEARCHTHREAD_H
 #define SEARCHTHREAD_H
 #include <string>
@@ -20,13 +29,24 @@ private:
   vector<string> *_ptrToResults;
   mutex *_ptrToResultsMutex;
 
+  // Returns true if a file is executable.
   bool isExecutableFile(const auto &directoryEntryIterator);
+  // Returns true if the directory entry is a hidden file.
   bool isHidden(auto &directoryEntryIterator);
+  /*
+    Iterates over a file looking for the regex. Once done searching,
+    the results are added to the results vector from the search manager. 
+  */
   void scan(auto &directoryEntry);
+  /* 
+    Searches the directory ignoring executable files and
+    hidden files and directories.
+   */
   void traverseDirectory();
 
 public:
   SearchThread(regex &pattern, const fs::path &path, vector<string> *results, mutex *m);
+  // Makes this class callable. This enables it to be called in a thread as a functor.
   void operator()();
 };
 #endif
