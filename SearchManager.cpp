@@ -10,29 +10,39 @@ void SearchManager::traverseFilesystem()
     cout << endl;
     fs::path p = _path;
 
-    // Search for the pattern in the _path directory
     SearchThread searchThread(_pattern, p, &results, &resultsMutex);
-    threads.push_back(thread(searchThread));
 
-    // Recursively search the directory and spawn a thread for each new directory
-    for (auto it = fs::recursive_directory_iterator(_path);
-         it != fs::recursive_directory_iterator(); ++it)
+    fs::directory_entry tmpDirectoryEntry(p); 
+    if (fs::is_regular_file(tmpDirectoryEntry))
     {
-        // Avoid executable files or hidden files/directories
-        if (isExecutableFile(it) || isHidden(it))
-        {
-            continue;
-        }
-        // Launch a new thread for each directory
-        if (fs::is_directory(it->status()))
-        {
-            SearchThread searchThread(_pattern, it->path(), &results, &resultsMutex);
-            threads.push_back(thread(searchThread));
-        }
+        searchThread.scan(d);
     }
-    for (auto &t : threads)
+    else
     {
-        t.join();
+        // Search for the pattern in the _path directory
+        //SearchThread searchThread(_pattern, p, &results, &resultsMutex);
+        threads.push_back(thread(searchThread));
+
+        // Recursively search the directory and spawn a thread for each new directory
+        for (auto it = fs::recursive_directory_iterator(_path);
+             it != fs::recursive_directory_iterator(); ++it)
+        {
+            // Avoid executable files or hidden files/directories
+            if (isExecutableFile(it) || isHidden(it))
+            {
+                continue;
+            }
+            // Launch a new thread for each directory
+            if (fs::is_directory(it->status()))
+            {
+                SearchThread searchThread(_pattern, it->path(), &results, &resultsMutex);
+                threads.push_back(thread(searchThread));
+            }
+        }
+        for (auto &t : threads)
+        {
+            t.join();
+        }
     }
     // Print the results of the search
     for (auto i : results)
