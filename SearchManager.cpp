@@ -14,7 +14,7 @@ void SearchManager::traverseFilesystem()
 
     fs::directory_entry tmpDirectoryEntry(p);
 
-    // Check for existence to guard against a failure and unexpected program 
+    // Check for existence to guard against a failure and unexpected program
     // termination
     if (!fs::exists(tmpDirectoryEntry.status()))
     {
@@ -22,7 +22,7 @@ void SearchManager::traverseFilesystem()
         return;
     }
     // If the path is to a single file, we need to bypass all of the iteration
-    // logic and just scan the one file. This case is not multi threaded as it 
+    // logic and just scan the one file. This case is not multi threaded as it
     // does not make sense.
     if (fs::is_regular_file(tmpDirectoryEntry))
     {
