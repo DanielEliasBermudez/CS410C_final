@@ -8,7 +8,8 @@ SearchThread::SearchThread(regex &pattern, const fs::path &path,
 {
 }
 
-void SearchThread::scan(auto &directoryEntry)
+//void SearchThread::scan(auto &directoryEntry)
+void SearchThread::scan(const fs::directory_entry &directoryEntry)
 {
     map<int, string> lines;
     ifstream file;

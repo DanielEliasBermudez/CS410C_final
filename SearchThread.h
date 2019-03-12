@@ -33,11 +33,6 @@ private:
   bool isExecutableFile(const auto &directoryEntryIterator);
   // Returns true if the directory entry is a hidden file.
   bool isHidden(auto &directoryEntryIterator);
-  /*
-    Iterates over a file looking for the regex. Once done searching,
-    the results are added to the results vector from the search manager. 
-  */
-  void scan(auto &directoryEntry);
   /* 
     Searches the directory ignoring executable files and
     hidden files and directories.
@@ -48,5 +43,11 @@ public:
   SearchThread(regex &pattern, const fs::path &path, vector<string> *results, mutex *m);
   // Makes this class callable. This enables it to be called in a thread as a functor.
   void operator()();
+  /*
+    Iterates over a file looking for the regex. Once done searching,
+    the results are added to the results vector from the search manager. 
+  */
+  //void scan(auto &directoryEntry);
+  void scan(const fs::directory_entry &directoryEntry);
 };
 #endif
