@@ -4,7 +4,7 @@ SearchManager::SearchManager(string &pattern, string &path) : _pattern(pattern),
                                                               _path(path)
 {
 }
-
+/*
 void SearchManager::scan(auto &directoryEntry)
 {
 
@@ -48,10 +48,17 @@ void SearchManager::scan(auto &directoryEntry)
     }
     results.push_back(output);
 }
-
+*/
 void SearchManager::traverseFilesystem()
 {
     cout << endl;
+    // TODO need to convert _path to the type fs::path
+    fs::path p = _path;
+    //SearchThread* searchThread = new SearchThread(ref(_pattern), ref(p), &results, &resultsMutex);
+    //SearchThread searchThread(ref(_pattern), ref(p), &results, &resultsMutex);
+    SearchThread searchThread(_pattern, p, &results, &resultsMutex);
+    threads.push_back(thread(searchThread));
+
 
     for (auto it = fs::recursive_directory_iterator(_path);
          it != fs::recursive_directory_iterator(); ++it)
@@ -60,9 +67,20 @@ void SearchManager::traverseFilesystem()
         {
             continue;
         }
-        scan(*it);
+        //scan(*it);
+        if (fs::is_directory(it->status())) 
+        {
+            cout << it->path() << endl;
+            cout << "time to create new thread" << endl;
+            SearchThread searchThread(_pattern, it->path(), &results, &resultsMutex);
+            threads.push_back(thread(searchThread));
+        }
     }
-
+    for (auto& t : threads)
+    {
+        t.join();
+    }
+    // Print the results of the search
     for (auto i : results)
     {
         cout << i;

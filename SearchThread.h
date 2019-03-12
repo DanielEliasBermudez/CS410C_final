@@ -1,33 +1,32 @@
-#ifndef SEARCHMANAGER_H
-#define SEARCHMANAGER_H
+#ifndef SEARCHTHREAD_H
+#define SEARCHTHREAD_H
 #include <string>
+#include <map>
 #include <fstream>
 #include <iostream>
 #include <regex>
 #include <experimental/filesystem>
 #include <vector>
-#include <thread>
 #include <mutex>
-#include "SearchThread.h"
 
 using namespace std;
 namespace fs = experimental::filesystem;
 
-class SearchManager
+class SearchThread
 {
 private:
   regex _pattern;
   string _path;
-  mutex resultsMutex;
-  vector<string> results;
-  vector<thread> threads;
+  vector<string>* _ptrToResults;
+  mutex* _ptrToResultsMutex;
 
   bool isExecutableFile(const auto &directoryEntryIterator);
   bool isHidden(auto &directoryEntryIterator);
-  //void scan(auto &directoryEntry);
+  void scan(auto &directoryEntry);
+  void traverseDirectory();
 
 public:
-  SearchManager(string &pattern, string &path);
-  void traverseFilesystem();
+  SearchThread(regex &pattern, const fs::path &path, vector<string>* results, mutex* m);
+  void operator()();
 };
 #endif

@@ -59,8 +59,6 @@ int main(int argc, char **argv)
     }
     else if ((argc - patternIndex) == 1)
     {
-        // pattern(argv[patternIndex]);
-        // path(".");
         pattern = argv[patternIndex];
         path = ".";
     }
@@ -68,7 +66,7 @@ int main(int argc, char **argv)
     {
         displayHelpMessage();
     }
+
     SearchManager s(pattern, path);
     s.traverseFilesystem();
-    //s.scan();
 }
