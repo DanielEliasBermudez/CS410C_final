@@ -24,7 +24,6 @@ private:
 
   bool isExecutableFile(const auto &directoryEntryIterator);
   bool isHidden(auto &directoryEntryIterator);
-  //void scan(auto &directoryEntry);
 
 public:
   SearchManager(string &pattern, string &path);

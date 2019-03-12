@@ -11,7 +11,6 @@ _ptrToResultsMutex(m)
 
 void SearchThread::scan(auto &directoryEntry)
 {
-
     map<int, string> lines;
     ifstream file;
 
@@ -57,8 +56,6 @@ void SearchThread::scan(auto &directoryEntry)
 
 void SearchThread::traverseDirectory()
 {
-    //cout << endl;
-
     for (auto it = fs::directory_iterator(_path);
          it != fs::directory_iterator(); ++it)
     {
@@ -68,11 +65,6 @@ void SearchThread::traverseDirectory()
         }
         scan(*it);
     }
-
-    //for (auto i : results)
-    //{
-    //    cout << i;
-    //}
 }
 
 void SearchThread::operator()()
@@ -96,7 +88,6 @@ bool SearchThread::isExecutableFile(const auto &directoryEntryIterator)
 
 bool SearchThread::isHidden(auto &directoryEntryIterator)
 {
-
     // Ignore hidden files
     if (!strncmp(directoryEntryIterator->path().filename().c_str(), ".", 1))
     {

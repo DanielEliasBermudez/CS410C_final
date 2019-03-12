@@ -4,74 +4,29 @@ SearchManager::SearchManager(string &pattern, string &path) : _pattern(pattern),
                                                               _path(path)
 {
 }
-/*
-void SearchManager::scan(auto &directoryEntry)
-{
 
-    map<int, string> lines;
-    ifstream file;
-
-    file.open(directoryEntry.path());
-    int counter = 1;
-    string line;
-
-    while (getline(file, line))
-    {
-        if (regex_search(line, _pattern))
-        {
-            lines[counter] = line;
-        }
-        ++counter;
-    }
-    file.close();
-
-    string output;
-    // Print the file name
-    if (!lines.empty())
-    {
-        output = directoryEntry.path();
-        output += "\n";
-    }
-
-    for (auto i : lines)
-    {
-        output += to_string(i.first);
-        output += ": ";
-        output += i.second;
-        output += "\n";
-    }
-
-    // Print a blank line between outputs
-    if (!lines.empty())
-    {
-        output += "\n";
-    }
-    results.push_back(output);
-}
-*/
 void SearchManager::traverseFilesystem()
 {
     cout << endl;
-    // TODO need to convert _path to the type fs::path
     fs::path p = _path;
-    //SearchThread* searchThread = new SearchThread(ref(_pattern), ref(p), &results, &resultsMutex);
-    //SearchThread searchThread(ref(_pattern), ref(p), &results, &resultsMutex);
+
+    // Search for the pattern in the _path directory
     SearchThread searchThread(_pattern, p, &results, &resultsMutex);
     threads.push_back(thread(searchThread));
-
 
     for (auto it = fs::recursive_directory_iterator(_path);
          it != fs::recursive_directory_iterator(); ++it)
     {
+        // Avoid executable files or hidden files/directories
         if (isExecutableFile(it) || isHidden(it))
         {
             continue;
         }
-        //scan(*it);
+        // Launch a new thread for each directory
         if (fs::is_directory(it->status())) 
         {
-            cout << it->path() << endl;
-            cout << "time to create new thread" << endl;
+            //cout << it->path() << endl;
+            //cout << "time to create new thread" << endl;
             SearchThread searchThread(_pattern, it->path(), &results, &resultsMutex);
             threads.push_back(thread(searchThread));
         }
