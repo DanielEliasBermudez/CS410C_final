@@ -17,8 +17,8 @@ class SearchThread
 private:
   regex _pattern;
   string _path;
-  vector<string>* _ptrToResults;
-  mutex* _ptrToResultsMutex;
+  vector<string> *_ptrToResults;
+  mutex *_ptrToResultsMutex;
 
   bool isExecutableFile(const auto &directoryEntryIterator);
   bool isHidden(auto &directoryEntryIterator);
@@ -26,7 +26,7 @@ private:
   void traverseDirectory();
 
 public:
-  SearchThread(regex &pattern, const fs::path &path, vector<string>* results, mutex* m);
+  SearchThread(regex &pattern, const fs::path &path, vector<string> *results, mutex *m);
   void operator()();
 };
 #endif

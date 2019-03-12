@@ -1,11 +1,10 @@
 #include "SearchThread.h"
 
-SearchThread::SearchThread(regex &pattern, const fs::path &path, 
-                           vector<string>* results, mutex* m) :
-_pattern(pattern),
-_path(path),
-_ptrToResults(results),
-_ptrToResultsMutex(m)
+SearchThread::SearchThread(regex &pattern, const fs::path &path,
+                           vector<string> *results, mutex *m) : _pattern(pattern),
+                                                                _path(path),
+                                                                _ptrToResults(results),
+                                                                _ptrToResultsMutex(m)
 {
 }
 
@@ -75,7 +74,7 @@ void SearchThread::operator()()
 bool SearchThread::isExecutableFile(const auto &directoryEntryIterator)
 {
     auto perms = directoryEntryIterator->status().permissions();
-    
+
     if ((fs::is_regular_file(directoryEntryIterator->status())) &&
         ((perms & fs::perms::owner_exec) != fs::perms::none ||
          (perms & fs::perms::group_exec) != fs::perms::none ||

@@ -23,7 +23,7 @@ void SearchManager::traverseFilesystem()
             continue;
         }
         // Launch a new thread for each directory
-        if (fs::is_directory(it->status())) 
+        if (fs::is_directory(it->status()))
         {
             //cout << it->path() << endl;
             //cout << "time to create new thread" << endl;
@@ -31,7 +31,7 @@ void SearchManager::traverseFilesystem()
             threads.push_back(thread(searchThread));
         }
     }
-    for (auto& t : threads)
+    for (auto &t : threads)
     {
         t.join();
     }
@@ -45,7 +45,7 @@ void SearchManager::traverseFilesystem()
 bool SearchManager::isExecutableFile(const auto &directoryEntryIterator)
 {
     auto perms = directoryEntryIterator->status().permissions();
-    
+
     if ((fs::is_regular_file(directoryEntryIterator->status())) &&
         ((perms & fs::perms::owner_exec) != fs::perms::none ||
          (perms & fs::perms::group_exec) != fs::perms::none ||
@@ -63,7 +63,7 @@ bool SearchManager::isHidden(auto &directoryEntryIterator)
     if (!strncmp(directoryEntryIterator->path().filename().c_str(), ".", 1))
     {
         // Disable recursing through a hidden directory
-        if (fs::is_directory(directoryEntryIterator->status())) 
+        if (fs::is_directory(directoryEntryIterator->status()))
         {
             directoryEntryIterator.disable_recursion_pending();
         }
